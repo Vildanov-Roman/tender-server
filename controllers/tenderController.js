@@ -197,16 +197,25 @@ export const downloadTenderDocument = async (req, res) => {
                 .json({ message: 'Не удалось получить документ с источника' });
         }
 
+        // Читаем тело как ArrayBuffer (совместимо с Web-стримом)
+        const arrayBuf = await upstream.arrayBuffer();
+        const buf = Buffer.from(arrayBuf);
+
+        // Пробрасываем заголовки
         const contentType = upstream.headers.get('content-type') || 'application/octet-stream';
         const fileName = doc.FileName || `${docId}`;
 
         res.setHeader('Content-Type', contentType);
-        res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`);
+        res.setHeader(
+            'Content-Disposition',
+            `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`
+        );
+        res.setHeader('Content-Length', buf.length);
 
-        upstream.body.pipe(res);
+        return res.status(200).send(buf);
     } catch (e) {
         console.error('downloadTenderDocument error:', e);
-        res.status(500).json({ message: 'Ошибка при скачивании документа', error: e.message });
+        return res.status(500).json({ message: 'Ошибка при скачивании документа', error: e.message });
     }
 };
 
