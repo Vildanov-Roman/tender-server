@@ -16,5 +16,5 @@ router.delete('/archive/:tenderId', deleteArchivedTender);
 router.patch('/:tenderId/comment', updateComment);
 router.delete('/:tenderId', deleteTender);
 router.patch('/archive/:tenderId', archiveTender);
-router.get('/:tenderId/documents/:docId/download', downloadTenderDocument);
+router.get('/:tenderId/documents/:docId/download', downloadTenderDocument); //Загрузка доков
 export default router;
