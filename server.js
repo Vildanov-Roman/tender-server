@@ -5,10 +5,8 @@ import tenderRoutes from './routes/tenderRoutes.js';
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/tenders', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+// без useNewUrlParser/useUnifiedTopology (они устарели)
+await mongoose.connect('mongodb://localhost:27017/tenders');
 
 app.use(cors());
 app.use(express.json());
