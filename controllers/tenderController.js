@@ -4,7 +4,6 @@ import fetch from 'node-fetch';
 
 export const getAllTenders = async (req, res) => {
     try {
-        // Возвращаем только активные (из основной коллекции)
         const tenders = await Tender.find({});
         res.json(tenders);
     } catch (err) {
