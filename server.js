@@ -1,18 +1,31 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import cors from 'cors';
-import tenderRoutes from './routes/tenderRoutes.js';
+
+dotenv.config();
 
 const app = express();
-
-// без useNewUrlParser/useUnifiedTopology (они устарели)
-await mongoose.connect('mongodb://localhost:27017/tenders');
-
-app.use(cors());
 app.use(express.json());
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://ТВОЙ_ДОМЕН_ФРОНТА'],
+    credentials: true
+}));
 
-app.use('/api/tenders', tenderRoutes);
+const PORT = process.env.PORT || 5000;
+const uri = process.env.MONGODB_URI;
 
-app.listen(5000, () => {
-    console.log('Сервер запущен на порту 5000');
+if (!uri) {
+    console.error('❌ MONGODB_URI is not set');
+    process.exit(1);
+}
+
+mongoose.connect(uri)
+    .then(() => console.log('✅ MongoDB connected'))
+    .catch(err => console.error('❌ MongoDB connection error:', err));
+
+app.get('/health', (_req, res) => res.send('OK'));
+
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

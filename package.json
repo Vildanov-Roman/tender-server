@@ -10,8 +10,11 @@
     "mongoose": "^8.13.1",
     "node-fetch": "^3.3.2"
   },
+
+  "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js"
-  }
+    "start": "node server.js",
+    "build": "echo \"no build step\""
+  },
+  "engines": { "node": ">=18" }
 }

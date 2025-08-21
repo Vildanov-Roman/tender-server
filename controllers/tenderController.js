@@ -197,7 +197,6 @@ export const downloadTenderDocument = async (req, res) => {
                 .json({ message: 'Не удалось получить документ с источника' });
         }
 
-        // Читаем тело как ArrayBuffer (совместимо с Web-стримом)
         const arrayBuf = await upstream.arrayBuffer();
         const buf = Buffer.from(arrayBuf);
 
