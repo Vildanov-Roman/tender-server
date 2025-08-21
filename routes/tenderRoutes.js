@@ -7,6 +7,7 @@ import {
     archiveTender,
     getArchivedTenders,
     deleteArchivedTender,
+    downloadTenderDocument,
 } from '../controllers/tenderController.js';
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.patch('/archive/:tenderId', archiveTender);
 router.delete('/archive/:tenderId', deleteArchivedTender);
 
 // /api/tenders/:tenderId
+router.get('/:tenderId/documents/:docId', downloadTenderDocument);
 router.patch('/:tenderId/comment', updateComment);
 router.delete('/:tenderId', deleteTender);
 

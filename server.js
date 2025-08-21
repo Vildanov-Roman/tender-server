@@ -15,7 +15,7 @@ app.use(express.json());
 const allowedOrigins = [
     'http://localhost:3000',
     // ЗДЕСЬ УКЖИ ДОМЕН ФРОНТА (если он у тебя хостится отдельно, напр. Netlify/Vercel)
-    'https://uasolutions.netlify.app/',
+    'https://uasolutions.netlify.app',
 ];
 
 app.use(cors({

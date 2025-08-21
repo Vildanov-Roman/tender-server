@@ -28,7 +28,10 @@ export const tenderSchema = new mongoose.Schema({
     Documents: [{
         Title: String,
         Documents: [{
+            Id: String,
             Title: String,
+            FileName: String,
+            DatePublished: String,
             DocumentType: String,
             DownloadUrl: String
         }]
