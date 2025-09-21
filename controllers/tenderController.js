@@ -75,7 +75,6 @@ export const createTender = async (req, res) => {
                     Count: n.Count
                 })) || []
             })) || [],
-            // сохраняем секции как есть — это ждёт фронт
             Documents: data.Documents?.map(section => ({
                 Title: section.Title,
                 Documents: section.Documents?.map(d => ({
@@ -105,7 +104,7 @@ export const createTender = async (req, res) => {
 };
 
 export const updateComment = async (req, res) => {
-    const { tenderId } = req.params; // <-- совпадает с роутом
+    const { tenderId } = req.params;
     const { comment } = req.body;
     try {
         const updated = await Tender.findOneAndUpdate(
@@ -199,7 +198,6 @@ export const downloadTenderDocument = async (req, res) => {
         const arrayBuf = await upstream.arrayBuffer();
         const buf = Buffer.from(arrayBuf);
 
-        // Пробрасываем заголовки
         const contentType = upstream.headers.get('content-type') || 'application/octet-stream';
         const fileName = doc.FileName || `${docId}`;
 
