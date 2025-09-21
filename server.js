@@ -56,7 +56,7 @@ app.get('/health', (_req, res) => res.send('OK'));
 
 app.use('/api/tenders', tenderRoutes);
 
-app.use('/tasks', cronRouter); // POST /tasks/refresh
+app.use('/tasks', cronRouter);
 
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
 

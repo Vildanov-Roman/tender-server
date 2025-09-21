@@ -3,6 +3,8 @@ import { refreshTenders } from '../services/refreshTenders.js';
 
 const router = Router();
 
+console.log('[cron.js] mounted');
+
 router.get('/ping', (_req, res) => res.json({ ok: true, where: '/tasks/ping' }));
 
 router.post('/refresh', async (req, res) => {
