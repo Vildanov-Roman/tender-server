@@ -14,7 +14,7 @@ app.use(express.json());
 
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://uasolutions.netlify.app',
+    'https://solutionsua.netlify.app',
 ];
 
 app.use(
