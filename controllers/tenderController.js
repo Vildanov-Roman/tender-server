@@ -18,12 +18,15 @@ export const createTender = async (req, res) => {
         return res.status(400).json({ error: 'Неверный ID тендера' });
     }
 
-    const exists = await Tender.findOne({ TenderId: tenderId });
-    if (exists) {
-        return res.status(409).json({ error: 'Тендер уже существует' });
-    }
-
     try {
+        // Проверяем, есть ли уже этот тендер в общей "библиотеке"
+        const exists = await Tender.findOne({ TenderId: tenderId });
+        if (exists) {
+            // Если есть, просто отдаем его ID и данные (статус 200)
+            return res.status(200).json(exists);
+        }
+
+        // Если нет, скачиваем со смарттендера
         const response = await fetch(
             `https://smarttender.biz/PurchaseDetail/GetTenderModel/?tenderId=${tenderId}`
         );
@@ -31,9 +34,10 @@ export const createTender = async (req, res) => {
         const data = await response.json();
 
         if (!data || Object.keys(data).length === 0) {
-            return res.status(404).json({ error: 'Тендер не найден' });
+            return res.status(404).json({ error: 'Тендер не найден на SmartTender' });
         }
 
+        // Создаем новый тендер
         const tender = new Tender({
             TenderId: tenderId,
             DatePublished: data.DatePublished,
@@ -65,7 +69,7 @@ export const createTender = async (req, res) => {
             })) || [],
             Lots: data.Lots?.map(lot => ({
                 LotId: lot.LotId,
-                Title: lot.Title, // <-- добавили
+                Title: lot.Title,
                 Budget: {
                     AmountTitle: lot.Budget?.AmountTitle,
                     VatTitle: lot.Budget?.VatTitle
@@ -97,7 +101,7 @@ export const createTender = async (req, res) => {
         });
 
         await tender.save();
-        res.status(201).json(tender);
+        res.status(201).json(tender); // Возвращаем созданный тендер
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -215,4 +219,12 @@ export const downloadTenderDocument = async (req, res) => {
     }
 };
 
-
+export const getTenderById = async (req, res) => {
+    try {
+        const tender = await Tender.findOne({ TenderId: req.params.tenderId });
+        if (!tender) return res.status(404).json({ message: 'Тендер не найден' });
+        res.json(tender);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

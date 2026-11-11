@@ -1,27 +1,27 @@
 import express from 'express';
+import authMiddleware from '../middleware/auth.js';
+
 import {
     getAllTenders,
     createTender,
-    updateComment,
-    deleteTender,
-    archiveTender,
     getArchivedTenders,
-    deleteArchivedTender,
     downloadTenderDocument,
+    getTenderById
 } from '../controllers/tenderController.js';
 
 const router = express.Router();
 
+// Все маршруты общей библиотеки требуют авторизации
+router.use(authMiddleware);
+
 router.get('/', getAllTenders);
 router.post('/', createTender);
 
-
+// Чтение старого общего архива
 router.get('/archive', getArchivedTenders);
-router.patch('/archive/:tenderId', archiveTender);
-router.delete('/archive/:tenderId', deleteArchivedTender);
 
+// Получение тендера и документов
+router.get('/:tenderId', getTenderById);
 router.get('/:tenderId/documents/:docId', downloadTenderDocument);
-router.patch('/:tenderId/comment', updateComment);
-router.delete('/:tenderId', deleteTender);
 
 export default router;
